@@ -1,22 +1,20 @@
-import header_image_register from '../assets/header_register_image.jpg'
+import header_image from '../assets/header_image.png'
 
 export default function RegisterPage() {
-
-
 
     return (
         <>
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-1 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+                    <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-purple-900 " >
+                        Sign Up for HealthHub
+                    </h2>
                     <img
-                        className="mx-auto h-52 w-auto"
-                        src={header_image_register}
+                        className="mx-auto h-64 w-auto"
+                        src={header_image}
                         alt="HealthHub Header"
                     />
 
-                    <h2 className="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-purple-900" >
-                        Sign Up for HealthHub
-                    </h2>
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -24,31 +22,31 @@ export default function RegisterPage() {
                         <div className='flex items-center justify-between'>
                             {/* Fist name input */}
                             <div className='mr-6'>
-                            <label className="text-sm font-medium leading-6 text-purple-900">
+                                <label className="text-sm font-medium leading-6 text-purple-900">
                                     First Name
                                 </label>
-                                    <input
-                                        id="first_name"
-                                        name="first_name"
-                                        type="text"
-                                        autoComplete="first_name"
-                                        required
-                                        className="block w-full rounded-md border-0 py-1.5 text-purple-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6"
-                                    />
+                                <input
+                                    id="first_name"
+                                    name="first_name"
+                                    type="text"
+                                    autoComplete="first_name"
+                                    required
+                                    className="block w-full rounded-md border-0 py-1.5 text-purple-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6"
+                                />
                             </div>
                             {/* Last name input */}
                             <div>
                                 <label className="text-sm font-medium leading-6 text-purple-900">
                                     Last Name
                                 </label>
-                                    <input
-                                        id="last_name"
-                                        name="last_name"
-                                        type="text"
-                                        autoComplete="last_name"
-                                        required
-                                        className="block w-full rounded-md border-0 py-1.5 text-purple-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6"
-                                    />
+                                <input
+                                    id="last_name"
+                                    name="last_name"
+                                    type="text"
+                                    autoComplete="last_name"
+                                    required
+                                    className="block w-full rounded-md border-0 py-1.5 text-purple-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6"
+                                />
 
                             </div>
                         </div>

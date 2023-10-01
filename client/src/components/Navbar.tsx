@@ -5,7 +5,7 @@ import logo from '../assets/logo.png'
 import { Link } from 'react-router-dom'
 
 const navigation = [
-    { name: 'Doctros', href: '#' },
+    { name: 'Doctors', href: '#' },
     { name: 'Hospitals', href: '#' },
     { name: 'Labaratories', href: '#' },
     { name: 'About Us', href: '#' },
@@ -24,12 +24,10 @@ export default function Navbar() {
                     <div className="flex lg:flex-1">
                         <Link to="/" className="-m-1.5 p-1.5 flex">
                             <img
-                                className="h-8 w-auto"
+                                className=" h-10 w-auto"
                                 src={logo}
                                 alt=""
                             />
-                            <h2 className="text-2xl  ml-2 font-bold tracking-tight text-purple-900 font-sans">HealthHub</h2>
-
                         </Link>
                     </div>
                     <div className="flex lg:hidden">
