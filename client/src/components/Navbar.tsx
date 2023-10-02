@@ -10,7 +10,7 @@ const navigation = [
     { name: 'Labaratories', href: '#' },
     { name: 'About Us', href: '#' },
     { name: 'FAQ', href: '#' },
-    { name: 'Contacts', href: '#' },
+    { name: 'Contacts', href: '/contact-us' },
 
 ]
 
