@@ -1,36 +1,35 @@
-import { Link } from 'react-router-dom';
-import header_image from '../assets/header_image.png';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import CredentialsModel from '../models/CredentialsModel';
 import authService from '../services/AuthService';
+import notifyService from '../services/NotifyService';
+import Modal from '../components/Modal';
 
 export default function LoginPage() {
     const { register, handleSubmit, formState: { errors } } = useForm<CredentialsModel>();
+    const navigator = useNavigate();
 
     const submit = handleSubmit(async (credentials: CredentialsModel) => {
         try {
-            console.log(credentials);
             await authService.login(credentials);
-            window.location.href = "/";
-
+            notifyService.success("Login successful!");
+            navigator('/');
+            // if unauthorized, exception is thrown and catched
+        
         }
         catch (err) {
             console.log(err);
+            notifyService.error(err.message);
         }
 
     });
     return (
         <>
-            <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-20 lg:px-8">
+            <div className="flex min-h-full flex-1 flex-col justify-center items px-6 py-20 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                    <h2 className="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-purple-900" >
+                    <h2 className="mt-5 text-center text-4xl font-bold leading-9 tracking-tight text-purple-900" >
                         Sign in to your account
                     </h2>
-                    <img
-                        className="mx-auto h-74 w-auto"
-                        src={header_image}
-                        alt="HealthHub Header"
-                    />
                 </div>
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                     <form className="space-y-6" action="#" method="POST">
@@ -45,6 +44,7 @@ export default function LoginPage() {
                                     autoComplete="email"
                                     required
                                     className="block w-full rounded-md border-0 py-1.5 text-purple-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6"
+
                                     {...register("email", {
                                         required: true,
                                         pattern: {
@@ -105,7 +105,14 @@ export default function LoginPage() {
 
                     <p className="mt-10 text-center text-sm text-gray-500">
                         Not registered yet?{' '}
-                        <Link to="/register" className="font-semibold leading-6 text-purple-600 hover:text-purple-500">
+                        <Link 
+                        to={"/register"}
+                        onClick={
+                            () => {
+                               console.log("Register clicked");
+                            //    Open the modal
+                            }
+                        } className="font-semibold leading-6 text-purple-600 hover:text-purple-500">
                             Register here &rarr;
                         </Link>
                     </p>

@@ -15,7 +15,8 @@ class UserModel {
     public isConfirmed!: boolean;
     public isSpecialist!: boolean;
     public createdAt!: Date;
-    public updatedAt!: Date;    
+    public updatedAt!: Date;
+    public token!: string;    
 }
 
 export default UserModel;
