@@ -6,6 +6,7 @@ import { authStore } from "../redux/Store";
 class AuthService {
     public async login(credentials: CredentialsModel): Promise<UserModel> {
         const response = await axios.post("http://localhost:3001/api/auth/login", credentials);
+        console.log(response.data);
         if (response.data.status === 404) {
             throw new Error(response.data.message);
         }
@@ -48,6 +49,17 @@ class AuthService {
         } catch (err) {
             return false;
         }
+    }
+
+    public async forgotPassword(email: string): Promise<string> {
+        try {
+            const response = await axios.post("http://localhost:3001/api/auth/forgot-password", email);
+            console.log('response', response);
+            return response.data.message;
+        } catch (error) {
+            console.log(error);
+        }
+
     }
 }
 

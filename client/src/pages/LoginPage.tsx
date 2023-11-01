@@ -3,36 +3,43 @@ import { useForm } from 'react-hook-form';
 import CredentialsModel from '../models/CredentialsModel';
 import authService from '../services/AuthService';
 import notifyService from '../services/NotifyService';
-import Modal from '../components/Modal';
+import BackButtonNavigation from '../components/BackButtonNavigation';
+import Button from '../components/Button';
+import logo from '../assets/logo.png';
 
 export default function LoginPage() {
-    const { register, handleSubmit, formState: { errors } } = useForm<CredentialsModel>();
+    const {handleSubmit, register, formState: { errors } } = useForm<CredentialsModel>();
     const navigator = useNavigate();
 
-    const submit = handleSubmit(async (credentials: CredentialsModel) => {
+    const submit = (async (credentials: CredentialsModel) => {
         try {
-            await authService.login(credentials);
+            console.log(credentials);
+            const response = await authService.login(credentials);
+            console.log(response);
             notifyService.success("Login successful!");
-            navigator('/');
+            navigator("/");
             // if unauthorized, exception is thrown and catched
-        
         }
-        catch (err) {
+        catch (err: unknown) {
             console.log(err);
-            notifyService.error(err.message);
+            notifyService.error(err as string);
         }
-
     });
     return (
         <>
+            <BackButtonNavigation />
             <div className="flex min-h-full flex-1 flex-col justify-center items px-6 py-20 lg:px-8">
+                <img src={logo} alt="logo" className="mx-auto h-20 w-auto" />
+                <span className="
+                text-center text-4xl font-bold leading-9 tracking-tight text-purple-700
+                ">HealtHub</span>
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <h2 className="mt-5 text-center text-4xl font-bold leading-9 tracking-tight text-purple-900" >
                         Sign in to your account
                     </h2>
                 </div>
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-6" action="#" method="POST">
+                    <form className="space-y-6">
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-purple-900">
                                 Email address
@@ -66,9 +73,9 @@ export default function LoginPage() {
                                     Password
                                 </label>
                                 <div className="text-sm">
-                                    <a href="#" className="font-semibold text-purple-600 hover:text-purple-500">
+                                    <Link to="/forgotPassword" className="font-semibold text-purple-600 hover:text-purple-500">
                                         Forgot password?
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                             <div className="mt-2">
@@ -96,26 +103,51 @@ export default function LoginPage() {
                             <button
                                 type="submit"
                                 onClick={handleSubmit(submit)}
+
                                 className="flex w-full justify-center rounded-md bg-purple-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
                             >
                                 Login
                             </button>
                         </div>
                     </form>
+                    <div className="mt-6">
+                        <div className="relative">
+                            <div className="absolute inset-0 flex items-center">
+                                <div className="w-full border-t border-gray-300" />
+                            </div>
+                            <div className="relative flex justify-center text-sm">
+                                <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                            </div>
+                        </div>
 
+                        <div className="mt-6 grid grid-cols-3 gap-3">
+                            <div>
+                                <Button text="Google" onClick={() => { console.log("Google clicked") }} />
+                            </div>
+
+                            <div>
+                                <Button text="Facebook" onClick={() => { console.log("Facebook clicked") }} />
+                            </div>
+
+                            <div>
+                                <Button text="Github" onClick={() => { console.log("Github clicked") }} />
+                            </div>
+                        </div>
+                    </div>
                     <p className="mt-10 text-center text-sm text-gray-500">
                         Not registered yet?{' '}
-                        <Link 
-                        to={"/register"}
-                        onClick={
-                            () => {
-                               console.log("Register clicked");
-                            //    Open the modal
-                            }
-                        } className="font-semibold leading-6 text-purple-600 hover:text-purple-500">
+                        <Link
+                            to={"/register"}
+                            onClick={
+                                () => {
+                                    console.log("Register clicked");
+                                    //    Open the modal
+                                }
+                            } className="font-semibold leading-6 text-purple-600 hover:text-purple-500">
                             Register here &rarr;
                         </Link>
                     </p>
+                    {/* Add google social auth icon and */}
                 </div>
             </div>
         </>

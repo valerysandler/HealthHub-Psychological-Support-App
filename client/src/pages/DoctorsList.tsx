@@ -30,7 +30,7 @@ const people = [
         role: 'Family doctor',
         imageUrl:
             'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        lastSeen: null,
+        lastSeen: '3h ago',
         price: '$120',
     },
     {
@@ -65,18 +65,38 @@ const people = [
         lastSeen: null,
         price: '$120',
     },
+    {
+        key: 7,
+        name: 'Tom Cook',
+        email: 'tom.cook@example.com',
+        role: 'Director of Product',
+        imageUrl:
+            'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+        lastSeen: null,
+        price: '$120',
+    },
+    {
+        key: 8,
+        name: 'Tom Cook',
+        email: 'tom.cook@example.com',
+        role: 'Director of Product',
+        imageUrl:
+            'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+        lastSeen: null,
+        price: '$120',
+    },
 ]
 
 export default function DoctorsList() {
     return (
-        <div className="flex flex-col items-center min-h-screen py-1">
+        <div className="flex flex-col items-center ">
             <h1 className="text-4xl font-bold text-purple-900">Doctors</h1>
             <p className="mt-2 text-lg leading-8 text-gray-600">
                 Here you can find the list of all doctors.
             </p>
             <SearchBar />
             {/* // Create a grid with 3 columns and 4 rows for the doctors list page  */}
-            <div className="grid grid-cols-3 gap-4 py-10">
+            <div className="grid grid-cols-4 start gap-3 py-10">
                 {/* Map through the people array and create a card for each person */}
                 {people.map((person) => (
                     <div key={person.key} className="p-4 border-2 border-purple-100 rounded-lg hover:bg-purple-100 cursor-pointer">

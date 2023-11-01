@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react'
-import red_logo from '../assets/logo_purple.png'
+import red_logo from '../assets/logo.png'
 import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
 import {
   ArrowPathIcon,
@@ -54,9 +54,10 @@ export default function Navbar() {
     <header className="bg-white">
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div className="flex lg:flex-1">
-          <Link to="/" className="-m-1.5 p-1.5">
-            <span className="sr-only">Your Company</span>
-            <img className="h-10 w-auto" src={red_logo} alt="" />
+          <Link to="/" className="-m-1.5 p-1.5 first-line flex items-center">
+            <span className="sr-only">HealthHub</span>
+            <img className=" h-16 w-auto" src={red_logo} alt="" />
+            <span className=' text-center ml-3 text-lg text-purple-800 text-2xl'>HealthHub</span>
           </Link>
         </div>
         <div className="flex lg:hidden">
@@ -133,14 +134,14 @@ export default function Navbar() {
           <a href="#" className="text-sm font-semibold leading-6 text-gray-900  hover:text-purple-900">
             FAQ
           </a>
-          
+
         </Popover.Group>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           {loggedIn &&
             <ProfileDropdown />
           }
           {!loggedIn &&
-            <Link to="/login" className="text-sm font-semibold leading-6 text-gray-900  hover:text-purple-900">
+            <Link to="/login" className="text-sm font-semibold leading-6 text-purple-900  border-purple-300 rounded-xl hover:bg-purple-100  focus:ring-4 focus:ring-gray-100 dark:text-purple-900 dark:purpe-gray-700 dark:hover:bg-purple-200 dark:focus:ring-gray-800">
               Log in <span aria-hidden="true">&rarr;</span>
             </Link>}
 
@@ -151,10 +152,10 @@ export default function Navbar() {
         <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
             <a href="#" className="-m-1.5 p-1.5">
-              <span className="sr-only">Your Company</span>
+              <span className="sr-only">HealthHub</span>
               <img
                 className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                src={red_logo}
                 alt=""
               />
             </a>
@@ -219,7 +220,7 @@ export default function Navbar() {
                 <div className="py-6">
                   <Link
                     to="/login"
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-purple-900 border border-purple-300 hover:bg-purple-100 focus:ring-4 focus:ring-gray-100 dark:text-purple-900 dark:purpe-gray-700 dark:hover:bg-purple-200 dark:focus:ring-gray-800"
                   >
                     Log in
                   </Link>

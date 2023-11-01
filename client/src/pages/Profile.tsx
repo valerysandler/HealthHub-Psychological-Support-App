@@ -1,24 +1,6 @@
 import { UserCircleIcon } from '@heroicons/react/24/solid'
-import { getCountries } from '../services/CountriesService';
-import { CountryModel } from '../models/CountryModel';
-import { useEffect, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 
 export default function Profile() {
-    const [countries, setCountries] = useState<CountryModel[]>([]); // TODO: Add countries here
-
-
-    // Get country information from from service 
-    useEffect(() => {
-        getCountries()
-            .then((countries) => {
-                setCountries(countries);
-                console.log(countries);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, []);
 
     return (
         <form>
@@ -99,21 +81,7 @@ export default function Profile() {
                                     Country
                                 </label>
                                 <div className="mt-2">
-                                    <select
-                                        id="country"
-                                        name="country"
-                                        autoComplete="country-name"
-                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                                    >
-                                        {countries.map((country) => (
-                                            <option key={uuidv4()} value={country.name}>
-                                                {country.name}
-                                            </option>
-                                        ))}
-
-
-
-                                    </select>
+                                  
                                 </div>
                             </div>
 

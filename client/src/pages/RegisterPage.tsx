@@ -3,8 +3,8 @@ import UserModel from "../models/UserModel";
 import notifyService from "../services/NotifyService";
 import authService from "../services/AuthService";
 import { useNavigate } from "react-router-dom";
-import TextField from '@mui/material/TextField';
-import { Icon } from "@mui/material";
+import BackButtonNavigation from "../components/BackButtonNavigation";
+import logo from "../assets/logo.png";
 
 
 export default function RegisterPage() {
@@ -13,28 +13,30 @@ export default function RegisterPage() {
     const submit = handleSubmit(async (user: UserModel) => {
         try {
             await authService.register(user);
-
             notifyService.success("Registration successful!");
             navigator('/');
+        }
+        catch (err: unknown) {
+            notifyService.error(err as string);
+        }
+    });
 
-        }
-        catch (err) {
-            notifyService.error(err.message);
-        }
-    }
-    );
     return (
         <>
+            <BackButtonNavigation />
             <div className="flex min-h-full flex-1 flex-col justify-center px-1 py-1 lg:px-8 bg-white">
+                <img src={logo} alt="logo" className="mx-auto h-20 w-auto" />
+                <span className="
+                text-center text-4xl font-bold leading-9 tracking-tight text-purple-700
+                ">HealtHub</span>
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm flex justify-center items-start">
-                    <h2 className="mt-10 text-center text-4xl font-bold leading-9 tracking-tight text-purple-900  " >
+
+                    <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-purple-900  " >
                         Sign Up
                     </h2>
-
                 </div>
-
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-3" action="#" method="POST">
+                    <form className="space-y-3">
                         <div className='flex items-center justify-between'>
                             {/* Fist name input */}
                             <div className='mr-6'>
@@ -61,8 +63,6 @@ export default function RegisterPage() {
                                         </span>
                                     )
                                     }
-
-
                                 />
                             </div>
                             {/* Last name input */}
@@ -88,7 +88,6 @@ export default function RegisterPage() {
                                         className: "block w-full rounded-md border-0 py-1.5 text-purple-900 shadow-sm ring-1 ring-inset ring-red-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"
                                     }}
                                 />
-
                             </div>
                         </div>
                         <div>
@@ -96,7 +95,6 @@ export default function RegisterPage() {
                                 <label className="block text-sm font-medium leading-6 text-purple-900">
                                     Email
                                 </label>
-
                             </div>
                             <div>
                                 <input
@@ -114,30 +112,21 @@ export default function RegisterPage() {
                                     })}
                                     {...errors.email && {
                                         className: "block w-full rounded-md border-0 py-1.5 text-purple-900 shadow-sm ring-1 ring-inset ring-red-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"
-                                    }
-                                    }
+                                    }}
                                     {...errors.email && (
                                         // Add notify error 
                                         <span className="text-red-600 text-sm mt-1">
                                             {errors.email?.message}
                                         </span>
-                                    )
-                                    }
-
+                                    )}
                                 />
                             </div>
                         </div>
-
                         <div>
                             <div className="flex items-center justify-between">
                                 <label className="block text-sm font-medium leading-6 text-purple-900">
                                     Password
                                 </label>
-                                <div className="text-sm">
-                                    <a href="#" className="font-semibold text-purple-600 hover:text-purple-500">
-                                        Forgot password?
-                                    </a>
-                                </div>
                             </div>
                             <div>
                                 <input
@@ -160,38 +149,25 @@ export default function RegisterPage() {
                                 />
                             </div>
                         </div>
-                        {/* <div>
-                            <div className="flex items-center justify-between">
+                        {/* Add toggle if user specialist 
+                            <div>
                                 <label className="block text-sm font-medium leading-6 text-purple-900">
-                                    Confirm password
+                                    Are you a specialist?
                                 </label>
-                            </div>
-                            <div className="mt-2">
-                                <input
-                                    id="password"
-                                    type="password"
-                                    autoComplete="current-password"
-                                    required
-                                    className="block w-full rounded-md border-0 py-1.5 text-purple-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6"
-                                    {...register("password", {
-                                        required: true,
-                                        minLength: {
-                                            value: 8,
-                                            message: "Password must be at least 8 characters long"
-                                        },
-                                        validate: (value) => value === password.current || "The passwords do not match"
-                                    })}
-                                    {...errors.password && {
-                                        className: "block w-full rounded-md border-0 py-1.5 text-purple-900 shadow-sm ring-1 ring-inset ring-red-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6"
-                                    }
-                                }
-                                />
-                            </div>
-                        </div> */}
-                        {/* Add toggle if user specialist  */}
-
-
-
+                                <div className="mt-1">
+                                    <select
+                                        id="specialist"
+                                        autoComplete="specialist"
+                                        className="block w-full py-1.5 px-3 border-0 rounded-md shadow-sm focus:ring-2 focus:ring-purple-600 focus:ring-offset-2 focus:ring-offset-purple-100 focus:outline-none focus-visible:ring-purple-500 focus-visible:ring-opacity-75 sm:text-sm sm:leading-6"
+                                        {...register("isSpecialist", {
+                                            required: true,
+                                        })}
+                                    >
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                </div>
+                            </div> */}
                         {/* Add checkbox */}
                         <div className="flex items-center">
                             <input
@@ -215,7 +191,6 @@ export default function RegisterPage() {
                             </button>
                         </div>
                     </form>
-
                 </div >
             </div >
         </>
