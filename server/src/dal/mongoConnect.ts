@@ -6,7 +6,7 @@ console.log('uri', uri);
 async function connectToMongoDB(): Promise<void> {
     try {
         const db = await connect(uri); // Connect to MongoDB
-        console.log('Connected to MongoDB', db.connections[0].name);
+        console.log('Connected to MongoDB', db.connections[0].db.databaseName);
     }
     catch (error: any) {
         console.error('Error connecting to MongoDB', error);

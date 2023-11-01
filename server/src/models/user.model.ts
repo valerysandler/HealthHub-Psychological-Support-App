@@ -1,8 +1,9 @@
 import { model, Schema, Document } from 'mongoose';
 import validator from 'validator';
-import { Role } from './role';
+import { Role } from './role.model';
 
-export interface IUserModel extends Document {
+export interface BaseUserModel extends Document {
+    token: string;
     role: Role;
     email: string;
     firstName: string;
@@ -20,7 +21,10 @@ export interface IUserModel extends Document {
     updatedAt: Date;
 }
 
-const userSchema = new Schema<IUserModel>({
+const baseUserSchema = new Schema<BaseUserModel>({
+    token: {
+        type: String,
+    },
     firstName: {
         type: String,
         required: [true, 'First name is required'],
@@ -55,14 +59,14 @@ const userSchema = new Schema<IUserModel>({
         maxlength: [200, 'Password must be at most 50 characters'],
         validate: {
             validator: (value: string) => validator.isStrongPassword(value),
-            message: 'Password is invalid'
+            message: "Password isn't strong enough"
         }
     },
     role: {
         type: String,
         required: true,
         enum: Object.values(Role),
-        default: Role.CLIENT
+        default: Role.baseUser
     },
     birthDate: {
         type: Date,
@@ -118,4 +122,4 @@ const userSchema = new Schema<IUserModel>({
 });
 
 
-export const UserModel = model<IUserModel>('users', userSchema);
+export const BaseUserModel = model<BaseUserModel>('BaseUserModel', baseUserSchema, 'users');

@@ -1,11 +1,13 @@
 import jwt from 'jsonwebtoken';
-import { IUserModel, UserModel } from '../models/user.model';
+import { BaseUserModel } from '../models/user.model';
 import { StatusCodes } from 'http-status-codes';
 import { NextFunction, Request, Response } from 'express';
+import userService from './user.service';
 
-const generateJwtToken = async (user: IUserModel) => {
+const generateJwtToken = async (user: BaseUserModel) => {
     const payload = {
-        user : {
+        user: {
+            token: user.token,
             id: user._id,
             email: user.email,
             phone: user.phone,
@@ -21,7 +23,7 @@ const generateJwtToken = async (user: IUserModel) => {
             isConfirmed: user.isConfirmed,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt
-        }
+        } as BaseUserModel
     };
     return jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '24h' });
 }
@@ -35,13 +37,31 @@ const generateRefreshToken = async (id: string, email: string, phone: string, is
     };
     return jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '30d' });
 }
+const decodeToken = async (token: string) => {
+    return jwt.decode(token);
+}
 
 const verifyToken = async (token: string) => {
     return jwt.verify(token, process.env.JWT_SECRET!);
 }
 
+const deleteJwtToken = async (userId: string) => {
+    console.log("User id", userId);
+    // Delete token from database
+    const user = await userService.getUserByParams({ _id: userId });
+    console.log("User", user);
+    if (!user) {
+        return;
+    }
+    user.token = null;
+    await user.save();
+    return user;
+}
+
 export const jwtService = {
     generateJwtToken,
     generateRefreshToken,
-    verifyToken
+    decodeToken,
+    verifyToken,
+    deleteJwtToken
 };

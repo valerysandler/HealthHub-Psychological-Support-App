@@ -1,13 +1,16 @@
-import { IUserModel, UserModel } from "../models/user.model";
+import { BaseUserModel } from "../models/user.model";
 // Get user by params (email, phone)
-const getUserByParams = async (params: {}): Promise<IUserModel | null> => { // params: { email: string, phone: string }
-  const user = await UserModel.findOne(params).exec();
+const getUserByParams = async (params: {}): Promise<BaseUserModel | null> => { // params: { email: string, phone: string }
+  const user = await BaseUserModel.findOne(params).exec();
+  if (!user) {
+    return null;
+  }
   return user;
 }
 
-const getAllUsersFromDB = async (): Promise<IUserModel[] | void> => {
+const getAllUsersFromDB = async (): Promise<BaseUserModel[] | void> => {
   try {
-    const users = await UserModel.find().exec();
+    const users = await BaseUserModel.find().exec();
     console.log(users);
     return users;
 
@@ -16,25 +19,29 @@ const getAllUsersFromDB = async (): Promise<IUserModel[] | void> => {
   }
 }
 
-const save = async (user: IUserModel): Promise<IUserModel> => {
+const saveUser = async (user: BaseUserModel): Promise<BaseUserModel> => {
   const newUser = await user.save();
   return newUser;
 }
 
-const update = async (user: IUserModel): Promise<IUserModel> => {
+const updatedUser = async (user: BaseUserModel): Promise<BaseUserModel> => {
   const updatedUser = await user.save();
   return updatedUser;
 }
 
-const deleteUser = async (id: string): Promise<IUserModel> => {
-  const deletedUser = await UserModel.findByIdAndDelete(id).exec();
+const deleteUser = async (id: string): Promise<BaseUserModel> => {
+  const deletedUser = await BaseUserModel.findByIdAndDelete(id).exec();
   return deletedUser;
 }
+
+
 
 export default {
   getUserByParams,
   getAllUsersFromDB,
-  save
+  saveUser,
+  updatedUser,
+  deleteUser
 };
 
 

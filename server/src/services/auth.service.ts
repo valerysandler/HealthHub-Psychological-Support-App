@@ -1,40 +1,34 @@
 import { StatusCodes } from "http-status-codes";
-import ClientError from "../models/client-error";
+import ClientError from "../models/clientError.model";
 import CredentialsModel, { ICredentialsModel } from "../models/credentials.model";
-import { SpecialistModel } from "../models/specialist.model";
-import { IUserModel, UserModel } from "../models/user.model";
 import { jwtService } from "./jwt.service";
-import { sendEmail } from "./sendEmail.service";
 import userService from "./user.service";
 import bcrypt from "bcrypt";
+import { Role } from "../models/role.model";
+import { BaseUserModel } from "../models/user.model";
+import mailService from '../services/mail.service';
+
 
 class AuthService {
-    public async register(user: IUserModel): Promise<string | unknown> {
-        const userIsExist = await userService.getUserByParams({ email: user.email});
+    public async register(user: BaseUserModel): Promise<string | unknown> {
+        const userIsExist = await userService.getUserByParams({ email: user.email });
         if (userIsExist) {
             return new ClientError(StatusCodes.UNAUTHORIZED, `User with email ${user.email} or phone ${user.phone} already exist`);
         }
         console.log("User password ", user.password);
         user.password = await bcrypt.hash(user.password, 10);
         console.log("Hashed user password", user.password);
-        if (user.isSpecialist === true) {
-            const specialist = new SpecialistModel(user);
-            specialist.userId = user._id;
-            const errors = specialist.validateSync();
-            if (errors) {
-                return errors.message;
-            }
-
-            const result = await specialist.save();
-            console.log("Specialist created: ", result);
-        }
+        user.role = Role.baseUser;
         const result = await user.save();
         console.log("User created: ", result);
         // await sendEmail(user.email); // Uncommend this 
         // Create tokens for user and session and save them in database
         const token = await jwtService.generateJwtToken(user);
-        console.log("Token ", token);
-        return token;
+        user.token = token;
+        await user.save();
+        return {
+            token: token,
+        };
     }
 
     public async login(credentials: ICredentialsModel): Promise<string | unknown> {
@@ -50,11 +44,41 @@ class AuthService {
         if (!passwordIsCorrect) {
             return new ClientError(StatusCodes.UNAUTHORIZED, `Password is incorrect`);
         }
+        // Change user status to active
+        user.isActive = true;
+        await user.save();
         // Create tokens for user and session and save them in database
         const token = await jwtService.generateJwtToken(user);
-        return token;
+        user.token = token;
+        await user.save();
+        return {
+            token: token,
+        };
     }
 
+    public async logout(userId: string): Promise<void> {
+        const user = await userService.getUserByParams({ _id: userId });
+        if (!user) {
+            return;
+        }
+        user.isActive = false;
+        await user.save();
+        // Delete token from database
+        await jwtService.deleteJwtToken(userId);
+    }
+
+    public async forgotPassword(email: string): Promise<void> {
+        const user = await BaseUserModel.findOne({ email: email })
+        if (!user) {
+            return;
+        }
+        // Generate token
+        const token = await jwtService.generateJwtToken(user);
+        await mailService.sendForgotPasswordLink(email, token); // Uncommend this
+
+    }
 }
+
+
 
 export const authService = new AuthService();
