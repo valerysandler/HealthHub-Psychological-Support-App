@@ -8,9 +8,8 @@ import expressUpload from 'express-fileupload';
 import config from "./utils/config";
 import errorsHandler from "./middleware/errors-handler";
 import { authRouter } from './routers/auth.router';
-import { googleAuthRouter } from "./routers/googleAuth.router";
 import { roleRouter } from "./routers/role.router";
-import path from "path";
+import { validatorRouter } from "./routers/validator.router";
 
 //  Init express
 const app = express();
@@ -30,9 +29,8 @@ app.use(errorsHandler);
 //  Routes
 app.use("/api/auth", authRouter);
 app.use("/api/role", roleRouter);
-app.use("/api/auth/google", googleAuthRouter);
+app.use("/api/validate", validatorRouter);
 
-app.use("/api/auth/google", googleAuthRouter);
 // Listen unhandleRejection
 process.on("unhandledRejection", (reason, promise) => {
     console.log("Unhandled Rejection at:", promise, "reason:", reason);
