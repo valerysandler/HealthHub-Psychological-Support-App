@@ -1,9 +1,8 @@
 import { useForm } from "react-hook-form";
-import BackButtonNavigation from '../components/BackButtonNavigation';
-import authService from '../services/AuthService';
-import notifyService from '../services/NotifyService';
+import BackButtonNavigation from '../../Components/Buttons/BackButtonNavigation';
+import authService from '../../Services/AuthService';
+import notifyService from '../../services/NotifyService';
 import { useNavigate } from "react-router-dom";
-import logo from '../assets/logo.png';
 
 const ForgotPassword = () => {
     const { handleSubmit, register, formState: { errors } } = useForm();
@@ -20,15 +19,10 @@ const ForgotPassword = () => {
             notifyService.error(err as string);
         }
     }
-
     return (
         <>
             <BackButtonNavigation />
             <div className="flex min-h-full flex-1 flex-col justify-center items px-6 py-20 lg:px-8">
-            <img src={logo} alt="logo" className="mx-auto h-20 w-auto" />
-                <span className="
-                text-center text-4xl font-bold leading-9 tracking-tight text-purple-700
-                ">HealtHub</span>
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm pt-7">
                     <h2 className="mt-5 text-center text-4xl font-bold leading-9 tracking-tight text-purple-900" >
                         Forgot Password

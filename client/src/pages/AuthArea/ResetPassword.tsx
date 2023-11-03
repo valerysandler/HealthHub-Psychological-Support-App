@@ -1,20 +1,32 @@
+import axios from 'axios';
 import React, { SyntheticEvent, useState } from 'react'
+import { useForm } from 'react-hook-form';
+import jwtDecode from 'jwt-decode';
+import { useParams } from 'react-router-dom';
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const params = useParams();
+
 
   const handlePasswordChange = (event: SyntheticEvent) => {
-    setPassword(event);
+    setPassword(event.target.value);
+    console.log(password);
   };
 
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value);
+    console.log(confirmPassword);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Здесь вы отправляете запрос на сервер для обновления пароля, передавая новый пароль и токен сброса пароля.
+    // Get token from params
+    const token = params.token;
+    console.log(token);
+    // Get password from form
+   
   };
 
   return (

@@ -1,10 +1,9 @@
 import { useForm } from "react-hook-form";
-import UserModel from "../models/UserModel";
-import notifyService from "../services/NotifyService";
-import authService from "../services/AuthService";
+import UserModel from "../../models/UserModel";
+import notifyService from "../../services/NotifyService";
+import authService from "../../Services/AuthService";
 import { useNavigate } from "react-router-dom";
-import BackButtonNavigation from "../components/BackButtonNavigation";
-import logo from "../assets/logo.png";
+import BackButtonNavigation from "../../Components/Buttons/BackButtonNavigation";
 
 
 export default function RegisterPage() {
@@ -23,15 +22,10 @@ export default function RegisterPage() {
 
     return (
         <>
-            <BackButtonNavigation />
             <div className="flex min-h-full flex-1 flex-col justify-center px-1 py-1 lg:px-8 bg-white">
-                <img src={logo} alt="logo" className="mx-auto h-20 w-auto" />
-                <span className="
-                text-center text-4xl font-bold leading-9 tracking-tight text-purple-700
-                ">HealtHub</span>
+                <BackButtonNavigation />
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm flex justify-center items-start">
-
-                    <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-purple-900  " >
+                    <h2 className="mt-10 text-center text-4xl font-bold leading-9 tracking-tight text-purple-900  " >
                         Sign Up
                     </h2>
                 </div>

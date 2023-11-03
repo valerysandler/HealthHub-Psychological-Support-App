@@ -8,11 +8,7 @@ export default function Profile() {
                 {/* <div className="border-b border-gray-900/10 pb-12"> */}
                 <div className="flex flex-col items-center min-h-screen py-1">
                     <h2 className="text-4xl font-bold text-purple-900">Personal profile</h2>
-                    <p className="mt-2 text-lg leading-8 text-gray-600">
-                        Some personal information may be visible to other people using Workcation. If you don’t want people to see this information, you can change your settings.
-                    </p>
-
-                    <div className="border-b border-gray-900/10 pb-12">
+                    <div className="border-b border-gray-900/10 pb-12 pt-5">
                         <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
                         <p className="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
 

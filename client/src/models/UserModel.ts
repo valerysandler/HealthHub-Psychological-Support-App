@@ -11,6 +11,7 @@ class UserModel {
     public city!: string;
     public address!: string;
     public phone!: string;
+    public userImageUrl!: string;
     public isActive!: boolean;
     public isConfirmed!: boolean;
     public isSpecialist!: boolean;

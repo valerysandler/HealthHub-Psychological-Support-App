@@ -1,4 +1,6 @@
-import SearchBar from "../components/SearchBar"
+import CategoryList from "./CategoryList"
+import DoctorCard from "./DoctorCard"
+import SearchBar from "./SearchBar"
 
 const people = [
     {
@@ -95,31 +97,20 @@ export default function DoctorsList() {
                 Here you can find the list of all doctors.
             </p>
             <SearchBar />
-            {/* // Create a grid with 3 columns and 4 rows for the doctors list page  */}
-            <div className="grid grid-cols-4 start gap-3 py-10">
-                {/* Map through the people array and create a card for each person */}
+            <CategoryList />
+            {/* Create grid with doctors full width */}
+            <div className="grid grid-cols-1 gap-4 mt-4 sm:grid-cols-2 lg:grid-cols-6">
                 {people.map((person) => (
-                    <div key={person.key} className="p-4 border-2 border-purple-100 rounded-lg hover:bg-purple-100 cursor-pointer">
-                        <div className="flex items-center">
-                            <div className="flex-shrink-0">
-                                <img className="h-40 w-40 rounded-full" src={person.imageUrl} alt="" />
-                            </div>
-                            <div className="ml-3">
-                                <p className="text-lg font-medium text-gray-900">{person.name}</p>
-                                <div className="flex space-x-1 text-sm text-gray-500">
-                                    <time dateTime={person.lastSeenDateTime}>{person.lastSeen}</time>
-                                    <span aria-hidden="true">&middot;</span>
-                                    <span>{person.role}</span>
-                                </div>
-                                <div>
-                                    <p className="text-sm font-medium text-gray-900">{person.price}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <DoctorCard
+                        key={person.key}
+                        name={person.name}
+                        speciality={person.role}
+                        rating={4.5}
+                        image={person.imageUrl}
+                        onClick={() => { }}
+                    />
                 ))}
             </div>
         </div>
-
     )
 }

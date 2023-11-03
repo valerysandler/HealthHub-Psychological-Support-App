@@ -1,4 +1,4 @@
-import header from '../assets/header.jpg'
+import header from '../../Assets/header.jpg'
 import { Link } from 'react-router-dom'
 
 function Hero() {
