@@ -9,9 +9,10 @@ router.get('/test', (request, response) => {
 
 router.post('/login', authController.login);
 router.post('/register', authController.register);
-router.post('/forgot-password', authController.forgotPassword);
-router.get('/reset-password/:token', authController.resetPassword);
 router.post('/logout', authController.logout);
+// router.get('/activate-acount/:email', authController.activateAccount);
+router.post('/forgot-password', authController.forgotPassword);
+router.post('/reset-password/:userId/:token', authController.resetPassword);
 
 
 export const authRouter = router;

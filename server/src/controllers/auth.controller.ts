@@ -4,9 +4,11 @@ import { BaseUserModel } from '../models/user.model';
 import { authService } from '../services/auth.service';
 import CredentialsModel from '../models/credentials.model';
 import ClientError from '../models/clientError.model';
-import { jwtService } from '../services/jwt.service';
 import userService from '../services/user.service';
 import mailService from '../services/mail.service';
+import jwt from 'jsonwebtoken';
+import { Token, TokenModel } from '../models/tokens.models';
+import bcrypt from 'bcrypt';
 
 const login = async (request: Request, response: Response, next: NextFunction) => {
     try {
@@ -50,7 +52,7 @@ const register = async (request: Request, response: Response, next: NextFunction
 const logout = async (request: Request, response: Response, next: NextFunction) => {
     try {
         const { token } = request.body;
-        const decodedToken: any = await jwtService.decodeToken(token);
+        const decodedToken: any = jwt.decode(token);
         console.log("Decoded token", decodedToken);
         if (!decodedToken) {
             response.status(StatusCodes.UNAUTHORIZED).json({ message: 'Unauthorized' });
@@ -69,26 +71,37 @@ const logout = async (request: Request, response: Response, next: NextFunction) 
 
 const forgotPassword = async (request: Request, response: Response, next: NextFunction) => {
     try {
-        console.log("Forgot password")
-        const { email } = request.body;
-        console.log("Email", email);
+        const email = request.body.email;
+        if (typeof email !== 'string') {
+            response.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid email format' });
+            return;
+        }
         if (!email) {
             response.status(StatusCodes.BAD_REQUEST).json({ message: 'Email is required' });
             return;
         }
         // Check if user exists
         const user = await userService.getUserByParams({ email: email });
-        console.log("User", user);
         if (!user) {
             response.status(StatusCodes.NOT_FOUND).json({ message: 'User not found' });
             return;
         }
-        // Create token 
-        const token = await jwtService.generateJwtToken(email);
-        console.log("Token", token);
-        // Send email with link to reset password
-        await mailService.sendForgotPasswordLink(email, token);
-        response.status(StatusCodes.OK).json({ message: 'Email sent' });
+        const token = await TokenModel.findOne({ userId: user._id });
+        if (!token) {
+            const token = new TokenModel({
+                userId: user._id,
+                token: jwt.sign({ email: email }, process.env.JWT_SECRET!, { expiresIn: '1h' })
+            });
+            await token.save();
+        } else {
+            token.token = jwt.sign({ email: email }, process.env.JWT_SECRET!, { expiresIn: '1h' });
+            await token.save();
+        }
+    //    Create link with token as query param in url 
+        const link = `${process.env.CLIENT_URL}/resetPassword/${token.token}`;
+        console.log("Link", link);
+        // await mailService.sendForgotPasswordLink(email, link);
+       response.status(StatusCodes.OK).json({ link: link });
     } catch (error: any) {
         next(error);
     }
@@ -96,31 +109,26 @@ const forgotPassword = async (request: Request, response: Response, next: NextFu
 
 const resetPassword = async (request: Request, response: Response, next: NextFunction) => {
     try {
-        const { token } = request.params;
-        // Проверьте, действителен ли токен и не истек
-        const decodedToken: any = await jwtService.decodeToken(token);
-        console.log("Decoded token", decodedToken);
-        // Если токен действителен, позвольте пользователю ввести новый пароль
-        const { password } = request.body;
-        if (!password) {
-            response.status(StatusCodes.BAD_REQUEST).json({ message: 'Password is required' });
-            return;
-        }
-        const userId = decodedToken.user.id;
-        console.log("User id", userId);
-        // Удалите токен из базы данных
-        await jwtService.deleteJwtToken(userId);
-        response.status(StatusCodes.OK).json({ message: 'Password reset' });
-        // Обновите пароль пользователя в базе данных
-        const user = await userService.getUserByParams({ _id: userId });
+        const user = await BaseUserModel.findById(request.params.userId);
+        console.log("User", user);
         if (!user) {
+            response.status(StatusCodes.NOT_FOUND).json({ message: 'User not found' });
             return;
         }
-        user.password = password;
+        const token = await TokenModel.findOne({ userId: user._id });
+        if (!token) {
+            response.status(StatusCodes.NOT_FOUND).json({ message: 'Token not found' });
+            return;
+        }
+        // Hash password
+        const hashedPassword = await bcrypt.hash(request.body.password, 10);
+
+        user.password = hashedPassword;
         await user.save();
-        response.status(StatusCodes.OK).json({ message: 'Password reset' });
+        await token.deleteOne();
+        response.status(StatusCodes.OK).json({ message: 'Password reset successfully' });
     } catch (error: any) {
-        next(error);
+        response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
 }
 
@@ -130,5 +138,4 @@ export default {
     logout,
     forgotPassword,
     resetPassword
-
 };

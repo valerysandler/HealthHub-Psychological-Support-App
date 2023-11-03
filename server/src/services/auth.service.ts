@@ -74,7 +74,6 @@ class AuthService {
         }
         // Generate token
         const token = await jwtService.generateJwtToken(user);
-        await mailService.sendForgotPasswordLink(email, token); // Uncommend this
 
     }
 }

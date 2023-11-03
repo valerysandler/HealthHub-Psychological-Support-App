@@ -10,24 +10,35 @@ import errorsHandler from "./middleware/errors-handler";
 import { authRouter } from './routers/auth.router';
 import { googleAuthRouter } from "./routers/googleAuth.router";
 import { roleRouter } from "./routers/role.router";
+import path from "path";
 
 //  Init express
-const server = express();
+const app = express();
 
 // Middleware
-server.use(cors());
-server.use(express.json());
-server.use(expressUpload());
-server.use(express.static('public'));
+app.use(cors());
+app.use(express.json());
+app.use(expressUpload());
+app.use(express.static('public'));
+app.set('views engine', 'ejs');
+app.set('views', './views');
+
 // Error handler
-server.use(errorsHandler);
+app.use(errorsHandler);
 
 
 //  Routes
-server.use("/api/auth", authRouter);
-server.use("/api/role", roleRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/role", roleRouter);
+app.use("/api/auth/google", googleAuthRouter);
 
-server.use("/api/auth/google", googleAuthRouter);
+app.use("/api/auth/google", googleAuthRouter);
+// Listen unhandleRejection
+process.on("unhandledRejection", (reason, promise) => {
+    console.log("Unhandled Rejection at:", promise, "reason:", reason);
+});
 
-//  Start server
-server.listen(config.port, () => console.log(`Server started on port ${config.port}`));
+
+
+//  Start app
+app.listen(config.port, () => console.log(`Server started on port ${config.port}`));

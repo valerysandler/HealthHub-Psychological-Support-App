@@ -46,16 +46,20 @@ const verifyToken = async (token: string) => {
 }
 
 const deleteJwtToken = async (userId: string) => {
-    console.log("User id", userId);
-    // Delete token from database
-    const user = await userService.getUserByParams({ _id: userId });
-    console.log("User", user);
-    if (!user) {
-        return;
+    try {
+        console.log("User id", userId);
+        // Delete token from database
+        const user = await userService.getUserByParams({ _id: userId });
+        console.log("User", user);
+        if (!user) {
+            return;
+        }
+        user.token = null;
+        await user.save();
+        return user;
+    } catch (error: any) {
+        console.log(error.message);
     }
-    user.token = null;
-    await user.save();
-    return user;
 }
 
 export const jwtService = {

@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import jwt from 'jsonwebtoken';
 
 // Create a transporter object that will be used to send emails
 const transporter = nodemailer.createTransport({
@@ -11,8 +12,8 @@ const transporter = nodemailer.createTransport({
 // Send activation link to user email
 const sendActivationLink = async (email: string) => {
     try {
-        // Generate activation link
-        const activationLink = `${process.env.API_URL}/api/activate/${email}`;
+        // Generate activation link with redirect to frontend
+        const activationLink = `${process.env.API_URL}/api/activate-account/${email}`;
         // options for sending email
         const mailOptions = {
             from: process.env.EMAIL,
@@ -41,17 +42,17 @@ const sendActivationLink = async (email: string) => {
     }
 }
 
-const sendForgotPasswordLink = async (email: string, token: string) => {
+const sendForgotPasswordLink = async (email: string, link: string) => {
     try {
-        // Generate activation link
-        const forgotPasswordLink = `${process.env.API_URL}/api/reset-password/${token}`;
+        // Create link uuid for reset password link with redirect to frontend and token as query param in url 
+        // Generate forgot password link with redirect to frontend
         // options for sending email
         const mailOptions = {
             from: process.env.EMAIL,
             to: email,
             subject: "HealthHub - forgot password link for your account 📧",
             text: `
-                Enter this link in your browser to reset your password: ${forgotPasswordLink}
+                Enter this link in your browser to reset your password: ${link}
             `,
             html: `
                 <div>
@@ -61,7 +62,7 @@ const sendForgotPasswordLink = async (email: string, token: string) => {
                     <p>
                         Enter this link in your browser to reset your password:
                     </p>
-                    <a href="${forgotPasswordLink}">${forgotPasswordLink}</a>
+                    <a href="${link}">${link}</a>
                 </div>
             `
         };
