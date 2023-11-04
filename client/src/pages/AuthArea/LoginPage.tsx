@@ -2,28 +2,38 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import CredentialsModel from '../../Models/CredentialsModel';
 import authService from '../../Services/AuthService';
-import notifyService from '../../services/NotifyService';
+import notifyService from '../../Services/NotifyService';
 import Button from '../../Components/Buttons/Button';
 import BackButtonNavigation from '../../Components/Buttons/BackButtonNavigation';
 
 export default function LoginPage() {
-    const { handleSubmit, register, formState: { errors } } = useForm<CredentialsModel>();
     const navigator = useNavigate();
+    const { handleSubmit, register, formState: { errors } } = useForm<CredentialsModel>();
 
     const submit = (async (credentials: CredentialsModel) => {
         try {
-            console.log(credentials);
+            console.log("Credentials: ", credentials);
             const response = await authService.login(credentials);
-            console.log(response);
-            notifyService.success("Login successful!");
-            navigator("/");
-            // if unauthorized, exception is thrown and catched
+            console.log("Response: ", response);
+            if (response === 401) {
+                notifyService.error("Invalid credentials");
+                return;
+            } else if (response === 404) {
+                notifyService.error("User not found");
+                return;
+            } else {
+                notifyService.success("Logged in successfully");
+                navigator("/doctors");
+            }
         }
         catch (err: unknown) {
             console.log(err);
             notifyService.error(err as string);
         }
     });
+
+
+
     return (
         <>
             <BackButtonNavigation />
@@ -41,6 +51,7 @@ export default function LoginPage() {
                         </label>
                         <div className="mt-2">
                             <input
+                                onChange={(e) => { console.log(e.target.value) }}
                                 id="email"
                                 type="email"
                                 autoComplete="email"

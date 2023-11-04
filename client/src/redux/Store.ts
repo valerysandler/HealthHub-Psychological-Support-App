@@ -7,4 +7,4 @@ export const authStore = configureStore({
         authState: authReducer
     }
 });
-2
+console.log('authStore', authStore.getState());

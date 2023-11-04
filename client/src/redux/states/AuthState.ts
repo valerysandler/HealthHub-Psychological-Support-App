@@ -1,4 +1,4 @@
-import UserModel from "../../models/UserModel";
+import UserModel from "../../Models/UserModel";
 
 export class AuthState {
     public user: UserModel | null = null;
@@ -40,7 +40,7 @@ export function authReducer(currentState: AuthState = new AuthState(), action: A
     const newState = { ...currentState };
     switch (action.type) {
         case AuthActionType.UserRegistered:
-        case AuthActionType.UserLoggedIn:
+        case AuthActionType.UserLoggedIn:1
             newState.user = action.payload as UserModel;
             newState.token = newState.user.token;
             localStorage.setItem("token", newState.token);

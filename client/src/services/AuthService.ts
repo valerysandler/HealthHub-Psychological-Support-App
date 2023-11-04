@@ -1,17 +1,26 @@
 import axios from "axios";
-import CredentialsModel from "../models/CredentialsModel";
-import UserModel from "../models/UserModel";
-import { authStore } from "../redux/Store";
+import CredentialsModel from "../Models/CredentialsModel";
+import UserModel from "../Models/UserModel";
+import { authStore } from "../Redux/Store";
+import notifyService from "./NotifyService";
 
 class AuthService {
-    public async login(credentials: CredentialsModel): Promise<UserModel> {
-        const response = await axios.post("http://localhost:3001/api/auth/login", credentials);
-        console.log(response.data);
-        if (response.data.status === 404) {
-            throw new Error(response.data.message);
+
+    public async login(credentials: CredentialsModel) {
+        try {
+            const response = await axios.post("http://localhost:3001/api/auth/login", credentials);
+            if (response.data.status === 401) {
+                notifyService.error(response.data.message);
+            } else if (response.data.status === 403) {
+                notifyService.error(response.data.message);
+            } else if (response.data.status === 404) {
+                notifyService.error(response.data.message);
+            }
+            authStore.dispatch({ type: "UserLoggedIn", payload: response.data });
+            return response.data.status;
+        } catch (err: unknown) {
+            notifyService.error(err as string);
         }
-        authStore.dispatch({ type: "UserLoggedIn", payload: response.data });
-        return response.data;
 
     }
 
